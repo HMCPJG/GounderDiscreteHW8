@@ -1,0 +1,43 @@
+public class FermatPseudoprimeFinder {
+    public static void main(String[] args) {
+        // Starting from the number after 561 as we want to find the next pseudoprime.
+        for (int n = 562; n < 1000; n++) {
+            // Checking if 'n' is composite and a pseudoprime to the base 2.
+            if (isComposite(n) && isPseudoprime(n)) {
+                // Output the pseudoprime and exit the loop.
+                System.out.println("The third Fermat pseudoprime to the base 2 below 1000 is " + n);
+                break;
+            }
+        }
+    }
+
+    // Check if 'n' is a composite number.
+    static boolean isComposite(int n) {
+        if (n <= 3) return false;
+        if (n % 2 == 0 || n % 3 == 0) return true;
+        for (int i = 5; i * i <= n; i += 6) {
+            if (n % i == 0 || n % (i + 2) == 0) return true;
+        }
+        return false;
+    }
+
+    // Check if 'n' is a pseudoprime to the base 2.
+    static boolean isPseudoprime(int n) {
+        // 'n' is a pseudoprime if 2^(n-1) % n == 1.
+        return modPow(2, n - 1, n) == 1;
+    }
+
+    // Compute base^exponent mod modulus efficiently using binary exponentiation.
+    static int modPow(int base, int exponent, int modulus) {
+        int result = 1;
+        base %= modulus;
+        while (exponent > 0) {
+            if ((exponent & 1) == 1) {
+                result = (int)((long)result * base % modulus);
+            }
+            exponent >>= 1;
+            base = (int)((long)base * base % modulus);
+        }
+        return result;
+    }
+}
